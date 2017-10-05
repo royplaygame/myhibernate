@@ -1,5 +1,7 @@
 package com.hy.ly.po;
 
+import java.sql.Date;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,11 +33,11 @@ public class HibernateTest {
 		// 3.开启事务
 		Transaction transaction = session.beginTransaction();
 		// 4.执行保存操作
-		//News news = new News("JavaWeb","roy",new Date(new java.util.Date().getTime()));
-		//session.save(news);
+		News news = new News("JavaWeb","roy",new Date(new java.util.Date().getTime()));
+		session.save(news);
 		
-		News news = (News) session.get(News.class,22);
-		System.out.println(news);
+		/*News news = (News) session.get(News.class,22);
+		System.out.println(news);*/
 		// 5.提交事务
 		transaction.commit();
 		// 6.关闭Session

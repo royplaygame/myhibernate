@@ -7,7 +7,7 @@
     
         <id name="id" type="java.lang.Integer">
             <column name="ID" />
-            <!-- 指定主键的生成方式,native使用数据库本地的方式 -->
+            <!-- 指定主键的生成方式,native使用数据库低层的方式 -->
             <generator class="native" />
         </id>
         
