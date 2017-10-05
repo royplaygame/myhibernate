@@ -102,4 +102,65 @@ public class SessionTest {
 		News news2=(News) session.get(News.class, 41);
 		System.out.println(news2);
 	}
+	
+	/**
+	 * 1. save() 方法
+	 * 1). 使一个临时对象变为持久化对象
+	 * 2). 为对象分配 ID.
+	 * 3). 在 flush 缓存时会发送一条 INSERT 语句.
+	 * 4). 在 save 方法之前的 id 是无效的
+	 * 5). 持久化对象的 ID 是不能被修改的!
+	 */
+	@Test
+	public void testSave(){
+		News news = new News("BB","bb",new Date(new java.util.Date().getTime()));
+		news.setId(10001);
+		System.out.println(news);
+		session.save(news);
+		System.out.println(news);
+	}
+	
+	/**
+	 * persist(): 也会执行 INSERT 操作
+	 * 
+	 * 和 save() 的区别 : 
+	 * 在调用 persist 方法之前, 若对象已经有 id 了, 则不会执行 INSERT, 而抛出异常
+	 */
+	@Test
+	public void testPersist(){
+		News news = new News("DD","dd",new Date(new java.util.Date().getTime()));
+		news.setId(10001);
+		session.persist(news);
+	}
+	
+	
+	@Test
+	public void testGet(){
+		News news = (News) session.get(News.class, 41);
+		//session.close();
+		System.out.println(news); 
+	}
+	
+	
+	/**
+	 * get VS load:
+	 * 1. 执行 get 方法: 会立即加载对象. 
+	 *    执行 load 方法, 若不使用该对象, 则不会立即执行查询操作, 而返回一个代理对象
+	 *    get 是 立即检索, load 是延迟检索. 
+	 * 
+	 * 2. load 方法可能会抛出 LazyInitializationException 异常: 在需要初始化
+	 * 代理对象之前已经关闭了 Session
+	 * 
+	 * 3. 若数据表中没有对应的记录, Session 也没有被关闭.  
+	 *    get 返回 null
+	 *    load 若不使用该对象的任何属性, 没问题; 若需要初始化了, 抛出异常.  
+	 */
+	@Test
+	public void testLoad(){
+		News news = (News) session.load(News.class, 41);
+		System.out.println(news.getClass().getName()); 
+		
+		//session.close();
+		//System.out.println(news); 
+	}
 }
