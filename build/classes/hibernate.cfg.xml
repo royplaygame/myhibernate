@@ -25,6 +25,13 @@
 		<property name="hibernate.connection.isolation">2</property>
 		<!-- 使删除对象后, 把其 OID 置为  null -->
 		<property name="hibernate.use_identifier_rollback">true</property>
+		<!-- 配置C3P0数据源 -->
+		<property name="hibernate.c3p0.max_size">10</property>
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.acquire_increment">2</property>
+		<property name="hibernate.c3p0.timeout">2000</property>
+		<property name="hibernate.c3p0.idle_test_period">2000</property>
+		<property name="hibernate.c3p0.max_statements">10</property>
 		
 		<!-- 指定关联的 .hbm.xml文件 -->
 		<mapping resource="com/hy/ly/po/News.hbm.xml" />
