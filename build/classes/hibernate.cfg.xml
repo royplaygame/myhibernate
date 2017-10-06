@@ -32,7 +32,11 @@
 		<property name="hibernate.c3p0.timeout">2000</property>
 		<property name="hibernate.c3p0.idle_test_period">2000</property>
 		<property name="hibernate.c3p0.max_statements">10</property>
-		
+		<!-- jdbc.fetch_size和jdbc.batch_size对mysql无效，对Oracle有效 -->
+		<!-- 设定 JDBC 的 Statement 读取数据的时候每次从数据库中取出的记录条数 -->
+		<property name="hibernate.jdbc.fetch_size">100</property>
+		<!-- 设定对数据库进行批量删除，批量更新和批量插入的时候的批次大小 -->
+		<property name="hibernate.jdbc.batch_size">30</property>
 		<!-- 指定关联的 .hbm.xml文件 -->
 		<mapping resource="com/hy/ly/po/News.hbm.xml" />
 	</session-factory>

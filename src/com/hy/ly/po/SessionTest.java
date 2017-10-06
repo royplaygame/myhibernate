@@ -260,4 +260,20 @@ public class SessionTest {
 			}
 		});
 	}
+	
+	
+	@Test
+	public void testDynamicUpdate(){
+		News news = (News) session.get(News.class, 47);
+		news.setAuthor("bookname");
+		System.out.println(news.getDesc());
+	}
+	
+	@Test
+	public void testIdGenerator() throws InterruptedException{
+		News news = new News("LL", "ll", new Date(new java.util.Date().getTime()));
+		session.save(news); 
+		
+		Thread.sleep(5000); 
+	}
 }
