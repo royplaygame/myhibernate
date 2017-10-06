@@ -23,7 +23,8 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<!-- 设置事务的隔离级别 -->
 		<property name="hibernate.connection.isolation">2</property>
-		
+		<!-- 使删除对象后, 把其 OID 置为  null -->
+		<property name="hibernate.use_identifier_rollback">true</property>
 		
 		<!-- 指定关联的 .hbm.xml文件 -->
 		<mapping resource="com/hy/ly/po/News.hbm.xml" />

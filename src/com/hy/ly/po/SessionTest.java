@@ -1,12 +1,15 @@
 package com.hy.ly.po;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.jdbc.Work;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.After;
 import org.junit.Before;
@@ -162,5 +165,99 @@ public class SessionTest {
 		
 		//session.close();
 		//System.out.println(news); 
+	}
+	
+	/**
+	 * update:
+	 * 1. 若更新一个持久化对象, 不需要显示的调用 update 方法. 因为在调用 Transaction
+	 * 的 commit() 方法时, 会先执行 session 的 flush 方法.
+	 * 2. 更新一个游离对象, 需要显式的调用 session 的 update 方法. 可以把一个游离对象
+	 * 变为持久化对象
+	 * 
+	 * 需要注意的:
+	 * 1. 无论要更新的游离对象和数据表的记录是否一致, 都会发送 UPDATE 语句. 
+	 *    如何能让 updat 方法不再盲目的出发 update 语句呢 ? 在 .hbm.xml 文件的 class 节点设置
+	 *    select-before-update=true (默认为 false). 但通常不需要设置该属性. 
+	 * 
+	 * 2. 若数据表中没有对应的记录, 但还调用了 update 方法, 会抛出异常
+	 * 
+	 * 3. 当 update() 方法关联一个游离对象时, 
+	 * 如果在 Session 的缓存中已经存在相同 OID 的持久化对象, 会抛出异常. 因为在 Session 缓存中
+	 * 不能有两个 OID 相同的对象!
+	 *    
+	 */
+	@Test
+	public void testUpdate(){
+		News news=(News) session.get(News.class, 41);
+		
+		transaction.commit();
+		session.close();
+		
+		
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+		
+		//news.setTitle("JavaWeb");
+		
+		News news2=(News) session.get(News.class, 41);
+		System.out.println(news2);
+		session.update(news);
+	}
+	
+	
+	/**
+	 * 注意:
+	 * 1. 若 OID 不为 null, 但数据表中还没有和其对应的记录. 会抛出一个异常. 
+	 * 2. 了解: OID 值等于 id 的 unsaved-value 属性值的对象, 也被认为是一个游离对象
+	 */
+	@Test
+	public void testSaveOrUpdate(){
+		News news = new News("FFF", "fff", new Date(new java.util.Date().getTime()));
+		news.setId(11);
+		
+		session.saveOrUpdate(news); 
+	}
+	
+	/**
+	 * delete: 执行删除操作. 只要 OID 和数据表中一条记录对应, 就会准备执行 delete 操作
+	 * 若 OID 在数据表中没有对应的记录, 则抛出异常
+	 * 
+	 * 可以通过设置 hibernate 配置文件 hibernate.use_identifier_rollback 为 true,
+	 * 使删除对象后, 把其 OID 置为  null
+	 */
+	@Test
+	public void testDelete(){
+		//News news = new News();
+		//news.setId(11);
+		
+		News news = (News) session.get(News.class, 41);
+		session.delete(news); 
+		
+		System.out.println(news);
+	}
+	
+	/**
+	 * evict: 从 session 缓存中把指定的持久化对象移除
+	 */
+	@Test
+	public void testEvict(){
+		News news1 = (News) session.get(News.class, 41);
+		News news2 = (News) session.get(News.class, 42);
+		
+		news1.setTitle("AAAAA");
+		news2.setTitle("BBBBB");
+		
+		session.evict(news1); 
+	}
+	
+	@Test
+	public void testDoWork(){
+		session.doWork(new Work() {
+			@Override
+			public void execute(Connection connection) throws SQLException {
+				System.out.println(connection);
+				//调用存储过程
+			}
+		});
 	}
 }
