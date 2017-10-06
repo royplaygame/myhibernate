@@ -1,9 +1,13 @@
 package com.hy.ly.po;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -275,5 +279,29 @@ public class SessionTest {
 		session.save(news); 
 		
 		Thread.sleep(5000); 
+	}
+	
+	
+	@Test
+	public void testBlob() throws Exception{
+		News news = new News("Image", "image", new Date(new java.util.Date().getTime()));
+		news.setContent("content");
+		
+		InputStream stream = new FileInputStream("91.jpg");
+		Blob image=Hibernate.getLobCreator(session).createBlob(stream, stream.available());
+		news.setImage(image);
+		session.save(news); 
+		
+	}
+	@Test
+	public void testGetBlob() throws Exception{
+		News news = (News) session.get(News.class, 1);
+		System.out.println(news);
+		Blob image = news.getImage();
+		
+		InputStream in = image.getBinaryStream();
+		System.out.println(in.read());
+		System.out.println(in.available()); 
+		
 	}
 }

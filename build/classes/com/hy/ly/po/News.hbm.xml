@@ -31,5 +31,9 @@
         <!-- 映射派生属性 -->
         <property name="desc" formula="(select concat(concat(author,': '),title)  from news n where n.id=id)"></property>
         
+        <!-- 映射大文本 -->
+        <property name="content" type="materialized_clob"></property>
+        <property name="image" type="blob"></property>
+        
     </class>
 </hibernate-mapping>
