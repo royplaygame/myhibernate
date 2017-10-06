@@ -304,4 +304,12 @@ public class SessionTest {
 		System.out.println(in.available()); 
 		
 	}
+	
+	@Test
+	public void testComponent(){
+		Pay pay = new Pay(1000,80000,7);
+		Worker worker = new Worker("zhangsan",pay);
+		
+		session.save(worker);
+	}
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.hy.ly.po">
+	<class name="Worker" table="WORKER">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="native" />
+		</id>
+		<property name="name" type="java.lang.String">
+			<column name="NAME" />
+		</property>
+		<!-- 映射组成关系 -->
+		<component name="pay" class="Pay">
+			<parent name="worker"/>
+			<!-- 指定的组成关系的组件的属性 -->
+			<property name="monthPay" column="monthPay"></property>
+			<property name="yearPay" column="yearPay"></property>
+			<property name="vocationWithPay" column="vocationWithPay"></property>
+		</component>
+	</class>
+</hibernate-mapping>
