@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.hy.ly.po.n21">
+
+    <class name="Customer" table="CUSTOMER">
+    
+        <id name="custId" type="java.lang.Integer">
+            <column name="CUST_ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="custName" type="java.lang.String">
+            <column name="CUST_NAME" />
+        </property>
+        
+    </class>
+    
+</hibernate-mapping>
