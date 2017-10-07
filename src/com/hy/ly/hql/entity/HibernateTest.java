@@ -5,12 +5,19 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.junit.After;
 import org.junit.Before;
@@ -149,16 +156,16 @@ public class HibernateTest {
 			System.out.println(dept.getDeptName() + "------------>" + dept.getEmployees().size());
 		}
 	}
-	
+
 	@Test
-	public void testLeftJoinFetch2(){
+	public void testLeftJoinFetch2() {
 		String hql = "select e from Employee e inner join e.dept";
 		Query query = session.createQuery(hql);
-		
+
 		List<Employee> emps = query.list();
-		System.out.println(emps.size()); 
-		
-		for(Employee emp: emps){
+		System.out.println(emps.size());
+
+		for (Employee emp : emps) {
 			System.out.println(emp.getEmpName() + ", " + emp.getDept().getDeptName());
 		}
 	}
@@ -195,5 +202,95 @@ public class HibernateTest {
 		for (Department dept : depts) {
 			System.out.println(dept.getDeptName() + "------------>" + dept.getEmployees().size());
 		}
+	}
+
+	@Test
+	public void testQBC() {
+		// 1.创建Criteria对象
+		Criteria criteria = session.createCriteria(Employee.class);
+		// 2.添加条件:在 QBC 中查询条件使用 Criterion 来表示
+		// Criterion 可以通过 Restrictions 的静态方法得到
+		criteria.add(Restrictions.eq("empName", "KING"));
+
+		// 3.执行查询
+		Employee employee = (Employee) criteria.uniqueResult();
+		System.out.println(employee);
+	}
+
+	@Test
+	public void testQBC2() {
+		Criteria criteria = session.createCriteria(Employee.class);
+
+		// 1. AND: 使用 Conjunction 表示
+		// Conjunction 本身就是一个 Criterion 对象
+		// 且其中还可以添加 Criterion 对象
+		Conjunction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.ge("sal", 1500D));
+		conjunction.add(Restrictions.le("sal", 3000D));
+		System.out.println(conjunction);
+
+		// 2. OR
+		Disjunction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.like("empName", "A", MatchMode.ANYWHERE));
+		disjunction.add(Restrictions.eq("empName", "SCOTT"));
+		System.out.println(disjunction);
+
+		criteria.add(conjunction);
+		criteria.add(disjunction);
+
+		List<Employee> emps = criteria.list();
+		for (Employee e : emps) {
+			System.out.println(e);
+		}
+	}
+
+	@Test
+	public void testQBC3() {
+		Criteria criteria = session.createCriteria(Employee.class);
+		// 统计查询: 使用 Projection 来表示: 可以由 Projections 的静态方法得到
+		criteria.setProjection(Projections.max("sal"));
+		System.out.println(criteria.uniqueResult());
+	}
+
+	@Test
+	public void testQBC4() {
+		Criteria criteria = session.createCriteria(Employee.class);
+
+		// 1. 添加排序
+		criteria.addOrder(Order.desc("sal"));
+		criteria.addOrder(Order.asc("empName"));
+
+		// 2. 添加翻页方法
+		int pageNo = 2;
+		int pageSize = 5;
+		List<Employee> emps = criteria.setFirstResult((pageNo - 1) * pageSize).setMaxResults(pageSize).list();
+		for (Employee e : emps) {
+			System.out.println(e);
+		}
+	}
+
+	@Test
+	public void testNativeSQL() {
+		String sql = "insert into my_departments values(?,?,?)";
+		Query query = session.createSQLQuery(sql);
+		query.setInteger(0, 50).setString(1, "ADMIN").setString(2, "HAWAII").executeUpdate();
+	}
+
+	// 删除、更新操作
+	@Test
+	public void testHQLUpdate() {
+		// 1. 删除
+		String hql = "delete from Department d where d.id = :id";
+		session.createQuery(hql).setInteger("id", 50).executeUpdate();
+
+		// 2. 更新
+		// String hql = "update Department d set d.deptName=?,d.loc=? where
+		// d.deptNo=?";
+		// session.createQuery(hql).setString(0, "deptName").setString(1,"loc").setInteger(2, 50).executeUpdate();
+		
+		
+		// 3. 添加操作,（这个操作不可行，要用native SQL）
+		//String hql = "insert into my_departments values(?,?,?)";
+		//session.createQuery(hql).setInteger(0, 50).setString(1, "deptName").setString(1, "loc").executeUpdate();
 	}
 }
