@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.hy.ly.po.strategy">
+
+	<class name="Customer" table="CUSTOMER" lazy="true" batch-size="4">
+
+		<id name="custId" type="java.lang.Integer">
+			<column name="CUST_ID" />
+			<generator class="native" />
+		</id>
+
+		<property name="custName" type="java.lang.String">
+			<column name="CUST_NAME" />
+		</property>
+
+		<set name="orders" table="ORDERS" inverse="true" order-by="ORDER_NAME desc"
+			lazy="true" batch-size="3" fetch="join">
+			<key column="CUSTOMER_ID"></key>
+			<one-to-many class="Order" />
+		</set>
+
+	</class>
+
+</hibernate-mapping>
