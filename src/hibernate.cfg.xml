@@ -20,7 +20,7 @@
 		<!-- 是否对执行的sql格式化 -->
 		<property name="hibernate.format_sql">true</property>
 		<!-- 指定自动生成数据的策略 -->
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
 		<!-- 设置事务的隔离级别 -->
 		<property name="hibernate.connection.isolation">2</property>
 		<!-- 使删除对象后, 把其 OID 置为  null -->
@@ -43,8 +43,15 @@
 		<mapping resource="com/hy/ly/po/Worker.hbm.xml" />
 		<mapping resource="com/hy/ly/po/n21/Customer.hbm.xml" />
 		<mapping resource="com/hy/ly/po/n21/Order.hbm.xml" />
-		 -->
 		<mapping resource="com/hy/ly/po/n21/both/Customer.hbm.xml" />
 		<mapping resource="com/hy/ly/po/n21/both/Order.hbm.xml" />
+		<mapping resource="com/hy/ly/po/one2one/foreign/Manager.hbm.xml" />
+		<mapping resource="com/hy/ly/po/one2one/foreign/Department.hbm.xml" />
+		<mapping resource="com/hy/ly/po/one2one/primary/Manager.hbm.xml" />
+		<mapping resource="com/hy/ly/po/one2one/primary/Department.hbm.xml" />
+		 -->
+		<mapping resource="com/hy/ly/po/n2n/Item.hbm.xml" />
+		<mapping resource="com/hy/ly/po/n2n/Category.hbm.xml" />
+		
 	</session-factory>
 </hibernate-configuration>
