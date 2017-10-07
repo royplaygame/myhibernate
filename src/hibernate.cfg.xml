@@ -51,8 +51,9 @@
 		<mapping resource="com/hy/ly/po/one2one/primary/Department.hbm.xml" />
 		<mapping resource="com/hy/ly/po/n2n/Item.hbm.xml" />
 		<mapping resource="com/hy/ly/po/n2n/Category.hbm.xml" />
-		 -->
 		<mapping resource="com/hy/ly/po/subclass/Person.hbm.xml" />
+		 -->
+		<mapping resource="com/hy/ly/po/joined/subclass/Person.hbm.xml" />
 		
 	</session-factory>
 </hibernate-configuration>
