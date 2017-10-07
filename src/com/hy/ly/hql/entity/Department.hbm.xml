@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.hy.ly.hql.entity">
+
+	<class name="Department" table="MY_DEPARTMENTS">
+	
+		<id name="deptNo" type="java.lang.Integer">
+			<column name="DEPT_NO" />
+			<generator class="native" />
+		</id>
+		
+		<property name="deptName" type="java.lang.String">
+			<column name="DEPT_NAME" />
+		</property>
+		
+		<property name="loc" type="java.lang.String">
+			<column name="LOC" />
+		</property>
+		
+		<set name="employees" table="MY_EMPLOYEES" inverse="true" lazy="true">
+			<key>
+				<column name="DEPT_NO" />
+			</key>
+			<one-to-many class="Employee" />
+		</set>
+		
+	</class>
+	
+</hibernate-mapping>

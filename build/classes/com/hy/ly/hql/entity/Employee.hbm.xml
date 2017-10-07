@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="com.hy.ly.hql.entity.Employee" table="MY_EMPLOYEES">
+
+		<id name="empNo" type="java.lang.Integer" access="field">
+			<column name="EMP_NO" />
+			<generator class="native" />
+		</id>
+
+		<property name="empName" type="java.lang.String" access="field">
+			<column name="EMP_NAME" />
+		</property>
+
+		<property name="job" type="java.lang.String" access="field">
+			<column name="JOB" />
+		</property>
+
+		<property name="mgr" type="java.lang.Integer" access="field">
+			<column name="MGR" />
+		</property>
+
+		<property name="hireDate" type="java.util.Date" access="field">
+			<column name="HIRE_DATE" />
+		</property>
+
+		<property name="sal" type="double" access="field">
+			<column name="SAL" />
+		</property>
+
+		<property name="comm" type="java.lang.Double" access="field">
+			<column name="COMM" />
+		</property>
+
+		<many-to-one name="dept" class="com.hy.ly.hql.entity.Department">
+			<column name="DEPT_NO"></column>
+		</many-to-one>
+
+	</class>
+
+	<query name="salaryEmps"><![CDATA[from Employee e where e.sal > :minSal and e.sal < :maxSal order by e.sal desc]]></query>
+</hibernate-mapping>

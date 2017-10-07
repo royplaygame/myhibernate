@@ -54,9 +54,11 @@
 		<mapping resource="com/hy/ly/po/subclass/Person.hbm.xml" />
 		<mapping resource="com/hy/ly/po/joined/subclass/Person.hbm.xml" />
 		<mapping resource="com/hy/ly/po/union/subclass/Person.hbm.xml" />
-		 -->
 		<mapping resource="com/hy/ly/po/strategy/Customer.hbm.xml" />
 		<mapping resource="com/hy/ly/po/strategy/Order.hbm.xml" />
+		 -->
+		<mapping resource="com/hy/ly/hql/entity/Employee.hbm.xml" />
+		<mapping resource="com/hy/ly/hql/entity/Department.hbm.xml" />
 		
 	</session-factory>
 </hibernate-configuration>
