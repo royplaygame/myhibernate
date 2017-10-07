@@ -2,6 +2,7 @@ package com.hy.ly.hql.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -292,5 +293,84 @@ public class HibernateTest {
 		// 3. 添加操作,（这个操作不可行，要用native SQL）
 		//String hql = "insert into my_departments values(?,?,?)";
 		//session.createQuery(hql).setInteger(0, 50).setString(1, "deptName").setString(1, "loc").executeUpdate();
+	}
+	
+	
+	@Test
+	public void testHibernateSecondLevelCache(){
+		Employee employee = (Employee) session.get(Employee.class, 7782);
+		System.out.println(employee.getEmpName()); 
+		
+		transaction.commit();
+		session.close();
+		
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+		
+		Employee employee2 = (Employee) session.get(Employee.class, 7782);
+		System.out.println(employee2.getEmpName()); 
+	}
+	
+	@Test
+	public void testCollectionSecondLevelCache(){
+		Department dept = (Department) session.get(Department.class, 30);
+		System.out.println(dept.getDeptName());
+		System.out.println(dept.getEmployees().size()); 
+		
+		transaction.commit();
+		session.close();
+		
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+		
+		Department dept2 = (Department) session.get(Department.class, 30);
+		System.out.println(dept2.getDeptName());
+		System.out.println(dept2.getEmployees().size()); 
+	}
+	
+	@Test
+	public void testQueryCache(){
+		Query query = session.createQuery("FROM Employee");
+		query.setCacheable(true);
+		
+		List<Employee> emps = query.list();
+		System.out.println(emps.size());
+		
+		emps = query.list();
+		System.out.println(emps.size());
+		
+		//Criteria criteria = session.createCriteria(Employee.class);
+		//criteria.setCacheable(true);
+	}
+	
+	@Test
+	public void testUpdateTimeStampCache(){
+		Query query = session.createQuery("FROM Employee");
+		query.setCacheable(true);
+		
+		List<Employee> emps = query.list();
+		System.out.println(emps.size());
+		
+		Employee employee = (Employee) session.get(Employee.class, 7935);
+		employee.setSal(3000);
+		
+		emps = query.list();
+		System.out.println(emps.size());
+	}
+	
+	@Test
+	public void testQueryIterate(){
+		Department dept = (Department) session.get(Department.class, 30);
+		System.out.println(dept.getDeptName());
+		System.out.println(dept.getEmployees().size()); 
+		
+		Query query = session.createQuery("FROM Employee e WHERE e.dept.id = 30");
+//		List<Employee> emps = query.list();
+//		System.out.println(emps.size()); 
+		
+		Iterator<Employee> empIt = query.iterate();
+		while(empIt.hasNext()){
+			System.out.println(empIt.next().getEmpName()); 
+		}
 	}
 }

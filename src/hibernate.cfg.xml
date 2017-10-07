@@ -37,6 +37,14 @@
 		<property name="hibernate.jdbc.fetch_size">100</property>
 		<!-- 设定对数据库进行批量删除，批量更新和批量插入的时候的批次大小 -->
 		<property name="hibernate.jdbc.batch_size">30</property>
+		<!-- 启用二级缓存 -->
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<!-- 配置使用的二级缓存的产品 -->
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<!-- 配置启用查询缓存 -->
+		<property name="hibernate.cache.use_query_cache">true</property>
+		
+		
 		<!-- 指定关联的 .hbm.xml文件 -->
 		<!-- 
 		<mapping resource="com/hy/ly/po/News.hbm.xml" />
@@ -59,6 +67,11 @@
 		 -->
 		<mapping resource="com/hy/ly/hql/entity/Employee.hbm.xml" />
 		<mapping resource="com/hy/ly/hql/entity/Department.hbm.xml" />
+		
+		<!-- 配置哪些类使用二级缓存,也可以在类的hbm.xml中进行配置-->
+		<class-cache usage="read-write" class="com.hy.ly.hql.entity.Employee"/>
+		<class-cache usage="read-write" class="com.hy.ly.hql.entity.Department"/>
+		<collection-cache usage="read-write" collection="com.hy.ly.hql.entity.Department.employees"/>
 		
 	</session-factory>
 </hibernate-configuration>

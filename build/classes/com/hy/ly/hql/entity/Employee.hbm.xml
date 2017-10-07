@@ -4,7 +4,9 @@
 <hibernate-mapping>
 
 	<class name="com.hy.ly.hql.entity.Employee" table="MY_EMPLOYEES">
-
+		
+		<!-- <cache usage="read-write"/> -->
+		
 		<id name="empNo" type="java.lang.Integer" access="field">
 			<column name="EMP_NO" />
 			<generator class="native" />
