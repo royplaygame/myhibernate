@@ -43,7 +43,8 @@
 		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
 		<!-- 配置启用查询缓存 -->
 		<property name="hibernate.cache.use_query_cache">true</property>
-		
+		<!-- 配置管理Session的方式 -->
+		<property name="current_session_context_class">thread</property>
 		
 		<!-- 指定关联的 .hbm.xml文件 -->
 		<!-- 
