@@ -53,7 +53,7 @@ public class HibernateTest {
 		//获取 Session
 		//开启事务
 		Session session = HibernateUtils.getInstance().getSession();
-		System.out.println("------->" + session.hashCode());
+		System.out.println("----------------->" + session.hashCode());
 		Transaction transaction = session.beginTransaction();
 		
 		DepartmentDao departmentDao = new DepartmentDao();
